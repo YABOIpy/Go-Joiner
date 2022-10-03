@@ -22,6 +22,9 @@ func joiner() {
 	xconstr := `{"location":"Join Guild","location_guild_id":"`+guild+`","location_channel_id":"`+channel+`","location_channel_type":0}`
 	xstring := `{"os":"Windows","browser":"Discord Client","release_channel":"stable","client_version":"1.0.9006","os_version":"10.0.22000","os_arch":"x64","system_locale":"en-US","client_build_number":150347,"client_event_source":null}`
 	agent := "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) discord/1.0.9006 Chrome/91.0.4472.164 Electron/13.6.6 Safari/537.36"
+	
+	
+	
 	req, err := http.NewRequest("GET", "https://discord.com/api/v9/invites/"+invite+"?inputValue="+invite+"&with_counts=true&with_expiration=true", nil)
 	if err != nil {
 		log.Fatal(err)
