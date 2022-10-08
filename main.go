@@ -1,48 +1,56 @@
 package main
 
-//----------------\
-// Made by YABOI   \
-// GO Token Joiner |
-//----------------/
-
-
 import (
 	"bytes"
-	"log"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"os"
+	"os/exec"
+	"bufio"
 	"net/http"
 	"encoding/base64"
-	"encoding/json"
+	"sync"
 	"github.com/Danny-Dasilva/CycleTLS/cycletls"
 )
 
-func joiner() {
-	Client := cycletls.Init()
-	cookie := "__dcfduid=98fda5d03e2e11ed889365ed1a91b671; __sdcfduid=dcfduid=98fda5d03e2e11ed889365ed1a91b6715714520f372b42d532f848947adbb3f21ec8288fe425fc3cede4e91af51c065e; __cfruid=4dc76b3ea4b723672629a2cbdb7b3a3702265855-1664783924"
-	xconstr := `{"location":"Join Guild","location_guild_id":"`+guild+`","location_channel_id":"`+channel+`","location_channel_type":0}`
-	xstring := `{"os":"Windows","browser":"Discord Client","release_channel":"stable","client_version":"1.0.9006","os_version":"10.0.22000","os_arch":"x64","system_locale":"en-US","client_build_number":150347,"client_event_source":null}`
-	agent := "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) discord/1.0.9006 Chrome/91.0.4472.164 Electron/13.6.6 Safari/537.36"
-	
-	
-	
-	req, err := http.NewRequest("GET", "https://discord.com/api/v9/invites/"+invite+"?inputValue="+invite+"&with_counts=true&with_expiration=true", nil)
+type structs struct {
+	Time float64
+	Dcfd  string
+	Sdcfd string
+	Xprops string
+	Xconst string
+}
+
+
+func joiner(token string, invite string) {
+	payload := map[string]string{}
+	xp,_ := json.Marshal(payload)
+	Cookie := Build_cookie()
+	Cookies := "__dcfduid=" + Cookie.Dcfd + "; " + "__sdcfduid=" + Cookie.Sdcfd + "; "
+	req, err := http.NewRequest("POST", "https://discord.com/api/v9/invites/"+invite+"", bytes.NewBuffer(xp))
 	if err != nil {
 		log.Fatal(err)
 	}
 	for x,o := range map[string]string{
 		"accept": "*/*",
 		"accept-encoding": "gzip, deflate, br",
-		"accept-language": "en-GB,en-US;q=0.9",
+		"accept-language": "en-US,en-NL;q=0.9,en-GB;q=0.8",
 		"authorization": token,
-		"cookie": cookie,
-		"referer": "https://discord.com/channels/@me/",
+		"content-length": "2",
+		"content-type": "application/json",
+		"cookie": Cookies,
+		"origin": "https://discord.com",
+		"referer": "https://discord.com/channels/@me/1027847962124091452",
 		"sec-fetch-dest": "empty",
 		"sec-fetch-mode": "cors",
 		"sec-fetch-site": "same-origin",
-		"user-agent": agent,
+		"user-agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) discord/1.0.9006 Chrome/91.0.4472.164 Electron/13.6.6 Safari/537.36",
+		"x-context-properties": Build_Xheader().Xconst,
 		"x-debug-options": "bugReporterEnabled",
 		"x-discord-locale": "en-US",
-		"x-super-properties": base64.StdEncoding.EncodeToString([]byte(xstring)),
+		"x-super-properties": Build_Xheader().Xprops,
 	} {
 		req.Header.Set(x,o)
 	}
@@ -50,54 +58,101 @@ func joiner() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if resp.Response.StatusCode == 200 {
-		fmt.Println("[Xprops]> " + base64.StdEncoding.EncodeToString([]byte(xstring)))
-		payload := map[string]string{}
-		xp,_ := json.Marshal(payload) 
-		req, err := http.NewRequest("POST", "https://discord.com/api/v9/invites/"+invite+"", bytes.NewBuffer(xp))
+	if resp.StatusCode == 200 {
+		fmt.Println("Joined Server "+c+"| "+r+"", token)
+	} else if resp.StatusCode == 429 {
+		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			log.Fatal(err)
 		}
-		for x,o := range map[string]string{
-		    "accept": "*/*",
-		    "accept-encoding": "gzip, deflate, br",
-		    "accept-language": "en-GB,en-US;q=0.9",
-		    "authorization": token,
-		    "content-length": "2",
-		    "content-type": "application/json",
-		    "cookie": cookie,
-		    "origin": "https://discord.com",
-		    "referer": "https://discord.com/channels/@me/",
-		    "sec-fetch-dest": "empty",
-		    "sec-fetch-mode": "cors",
-		    "sec-fetch-site": "same-origin",
-		    "user-agent": agent,
-		    "x-context-properties": base64.StdEncoding.EncodeToString([]byte(xconstr)),
-		    "x-debug-options": "bugReporterEnabled",
-		    "x-discord-locale": "en-US",
-		    "x-super-properties": base64.StdEncoding.EncodeToString([]byte(xstring)),
-		} {
-			req.Header.Set(x,o)
-		}
-		resp, err := Client.Do(req)
-		if err != nil {
-			log.Fatal(err)
-		}
-		if resp.StatusCode == 200 {
-			fmt.Println("[>] Joined | " + token)
-		} else {
-			fmt.Println("[>] Failed | " + token + " | " + resp)
-		}
-
+		var ResponseBody structs
+		json.Unmarshal(body, &ResponseBody)
+		timeout := ResponseBody.Time
+		fmt.Println("(\033[33m/\033[39m) Rate Limmit "+c+"|"+r+" ["+c+"TIME"+r+"]: ", timeout)
+	} else {
+		fmt.Println("Somthing Whent Wrong | ", resp)
 	}
+
+
+
 }
 
 
 
-var client = cycletls.Init()
+func  Build_Xheader() structs {
+	Xheader := structs{}
+	xconststr := `{"location":"Invite Button Embed","location_guild_id":null,"location_channel_id":"","location_channel_type":3,"location_message_id":""}`
+	xpropsstr := `{"os":"Windows","browser":"Discord Client","release_channel":"stable","client_version":"1.0.9006","os_version":"10.0.22000","os_arch":"x64","system_locale":"en-US","client_build_number":151638,"client_event_source":null}`
+	Xheader.Xconst = base64.StdEncoding.EncodeToString([]byte(xconststr))
+	Xheader.Xprops = base64.StdEncoding.EncodeToString([]byte(xpropsstr))
+	return Xheader
+}
+
+
+func Build_cookie() structs {
+	req, err := http.Get("https://discord.com")
+	if err != nil {
+		log.Fatal(err)
+		CookieNil := structs{}
+		return CookieNil
+	}
+	defer req.Body.Close()
+
+	Cookie := structs{}
+	if req.Cookies() != nil {
+		for _, cookie := range req.Cookies() {
+			if cookie.Name == "__dcfduid" {
+				Cookie.Dcfd = cookie.Value
+			}
+			if cookie.Name == "__sdcfduid" {
+				Cookie.Sdcfd = cookie.Value
+			}
+		}
+	}
+	return Cookie
+}
+
+
+func read_tokens() ([]string, error) {
+	file, err := os.Open("tokens.txt")
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	var lines []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+	return lines, scanner.Err()
+}
+
+func cls() {
+	cmd := exec.Command("cmd", "/c", "cls") 
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+}
+
+
+
+
+var c = "\033[36m"
+var r = "\033[39m"
+var Client = cycletls.Init()
 
 func main() {
-	for token := range token {
-		joiner()
+	cls()
+	scn := bufio.NewScanner(os.Stdin)
+	lines, err := read_tokens()
+	if err != nil {
+		log.Fatal(err)
+	}	
+	fmt.Print("("+c+"-"+r+")  discord.gg"+c+"/"+r+"")
+	scn.Scan()
+	invite := scn.Text()
+	var wg sync.WaitGroup
+	wg.Add(len(lines))
+	for i := 0; i < len(lines); i++ {
+		joiner(lines[i], invite)
 	}
 }
