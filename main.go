@@ -59,7 +59,7 @@ func joiner(token string, invite string) {
 		log.Fatal(err)
 	}
 	if resp.StatusCode == 200 {
-		fmt.Println("Joined Server "+c+"| "+r+"", token)
+		fmt.Println("\033[32m┃"+r+" (\033[32m+\033[39m) Joined Server "+c+"| "+r+"", token[:40], " "+c+"|"+r+" gg"+c+"/"+r+""+invite+"")
 	} else if resp.StatusCode == 429 {
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
@@ -68,9 +68,9 @@ func joiner(token string, invite string) {
 		var ResponseBody structs
 		json.Unmarshal(body, &ResponseBody)
 		timeout := ResponseBody.Time
-		fmt.Println("(\033[33m/\033[39m) Rate Limmit "+c+"|"+r+" ["+c+"TIME"+r+"]: ", timeout)
+		fmt.Println("\033[33m┃ (\033[33m/\033[39m) Rate Limmit "+c+"|"+r+" ["+c+"TIME"+r+"]: ", timeout)
 	} else {
-		fmt.Println("Somthing Whent Wrong | ", resp)
+		fmt.Println("\033[31m┃ "+r+"(\033[31mx"+r+") Somthing Whent Wrong "+c+"|"+r+" ", resp)
 	}
 
 
@@ -142,21 +142,30 @@ var Client = &http.Client{
 	Transport: &http.Transport{
 		TLSClientConfig: &tls.Config{
 			MaxVersion: tls.VersionTLS13,
-			},
 		},
-	}
+		//Proxy: http.ProxyURL(p),
+	},
+}
+
+
 
 func main() {
 	cls()
-	logo := `GO TOKEN JOINER `+c+`| `+r+`V`+c+`.`+r+`1`+c+`
-___________________________________________`+r+``
+	logo := ``+c+`
+┃ _______________     ___________________________   __________________ 
+┃ __  ____/_  __ \    ______  /_  __ \___  _/__  | / /__  ____/__  __ \
+┃ _  / __ _  / / /    ___ _  /_  / / /__  / __   |/ /__  __/  __  /_/ /
+┃ / /_/ / / /_/ /     / /_/ / / /_/ /__/ /  _  /|  / _  /___  _  _, _/ 
+┃ \____/  \____/      \____/  \____/ /___/  /_/ |_/  /_____/  /_/ |_|  
+┃	
+┃  `+r+`[`+c+`https://github.com/yaboipy/go-joiner`+r+`]`
 	fmt.Print(logo)
 	scn := bufio.NewScanner(os.Stdin)
 	lines, err := read_tokens()
 	if err != nil {
 		log.Fatal(err)
 	}	
-	fmt.Print("\n\n	("+c+"-"+r+")  discord.gg"+c+"/"+r+"")
+	fmt.Print("\n"+c+"┃\n"+c+"┃"+r+"	("+c+"-"+r+")  discord.gg"+c+"/"+r+"")
 	scn.Scan()
 	invite := scn.Text()
 	var wg sync.WaitGroup
