@@ -42,7 +42,7 @@ func joiner(token string, invite string) {
 		"content-type": "application/json",
 		"cookie": Cookies,
 		"origin": "https://discord.com",
-		"referer": "https://discord.com/channels/@me/1027847962124091452",
+		"referer": "https://discord.com/channels/@me/",
 		"sec-fetch-dest": "empty",
 		"sec-fetch-mode": "cors",
 		"sec-fetch-site": "same-origin",
