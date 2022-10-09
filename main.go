@@ -12,7 +12,7 @@ import (
 	"net/http"
 	"encoding/base64"
 	"sync"
-	"github.com/Danny-Dasilva/CycleTLS/cycletls"
+	"crypto/tls"
 )
 
 type structs struct {
@@ -138,16 +138,25 @@ func cls() {
 
 var c = "\033[36m"
 var r = "\033[39m"
-var Client = cycletls.Init()
+var Client = &http.Client{
+	Transport: &http.Transport{
+		TLSClientConfig: &tls.Config{
+			MaxVersion: tls.VersionTLS13,
+			},
+		},
+	}
 
 func main() {
 	cls()
+	logo := `GO TOKEN JOINER `+c+`| `+r+`V`+c+`.`+r+`1`+c+`
+___________________________________________`+r+``
+	fmt.Print(logo)
 	scn := bufio.NewScanner(os.Stdin)
 	lines, err := read_tokens()
 	if err != nil {
 		log.Fatal(err)
 	}	
-	fmt.Print("("+c+"-"+r+")  discord.gg"+c+"/"+r+"")
+	fmt.Print("\n\n	("+c+"-"+r+")  discord.gg"+c+"/"+r+"")
 	scn.Scan()
 	invite := scn.Text()
 	var wg sync.WaitGroup
