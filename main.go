@@ -70,7 +70,7 @@ func joiner(token string, invite string) {
 		timeout := ResponseBody.Time
 		fmt.Println("\033[33m┃ (\033[33m/\033[39m) Rate Limmit "+c+"|"+r+" ["+c+"TIME"+r+"]: ", timeout)
 	} else {
-		fmt.Println("\033[31m┃ "+r+"(\033[31mx"+r+") Somthing Whent Wrong "+c+"|"+r+" ", resp[:100], " | Captcha")
+		fmt.Println("\033[31m┃ "+r+"(\033[31mx"+r+") Somthing Whent Wrong "+c+"|"+r+" ", Captcha")
 	}
 
 
