@@ -3,9 +3,8 @@ Discord Token Joiner
 
 ```
 1. put Tokens in tokens.txt
-2. if not using proxies leave proxies.txt blank
-3. run the joiner or if you dont want to install GO use the Releases
-4. Enjoy
+2. run the joiner or if you dont want to install GO use the Releases
+3. Enjoy
 
 ```
 
@@ -14,7 +13,7 @@ Discord Token Joiner
 ```ruby
 Go Joiner
 
-Token Joiner With TLS And Proxy Support/ Works without proxies
-Tokens Dont Lock and No Captcha to Slow Joining
+Token Joiner With TLS And Works Proxyless
+Tokens Dont Lock and No Captcha Due to Slow Joining
 
 ```
