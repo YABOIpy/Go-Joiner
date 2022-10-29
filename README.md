@@ -11,7 +11,6 @@ Discord Token Joiner
 
 ```
 
-![go-joiner](https://user-images.githubusercontent.com/110062350/194751556-9b2b446f-c876-4bf7-af8f-6942f457f087.gif)
 
 ```ruby
 Go Joiner
