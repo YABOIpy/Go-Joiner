@@ -17,6 +17,6 @@ Discord Token Joiner
 Go Joiner
 
 Token Joiner With TLS And Works Proxyless
-Tokens Dont Lock and No Captcha Due to Slow Joining
+Tokens Dont Lock and No Captcha Very Fast Join speed
 
 ```
