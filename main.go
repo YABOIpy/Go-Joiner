@@ -38,7 +38,6 @@ func joiner(token string, invite string) {
 		"accept-encoding": "gzip, deflate, br",
 		"accept-language": "en-US,en-NL;q=0.9,en-GB;q=0.8",
 		"authorization": token,
-		"content-length": "2",
 		"content-type": "application/json",
 		"cookie": Cookies,
 		"origin": "https://discord.com",
