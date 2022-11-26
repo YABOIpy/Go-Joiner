@@ -15,7 +15,7 @@ Discord Token Joiner
 ```ruby
 Go Joiner
 
-Token Joiner With TLS And Works Proxyless
+Token Joiner With TLS
 Tokens Dont Lock and No Captcha Very Fast Join speed
 
 ```
