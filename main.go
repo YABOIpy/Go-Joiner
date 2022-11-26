@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"net/url"
 	"os/exec"
 	"bufio"
 	"net/http"
@@ -21,6 +22,9 @@ type structs struct {
 	Sdcfd string
 	Xprops string
 	Xconst string
+	Joiner struct {
+		Proxy 	 string `json:"Proxy"`
+	} `json:"Joiner"`
 }
 
 
@@ -76,7 +80,16 @@ func joiner(token string, invite string) {
 
 }
 
+func config() structs {
+	var config structs
+	conf, err := os.Open("config.json")
+	defer conf.Close()
+	cerr(err)
+	xp := json.NewDecoder(conf)
+	xp.Decode(&config)
+	return config
 
+}
 
 func  Build_Xheader() structs {
 	Xheader := structs{}
@@ -137,12 +150,14 @@ func cls() {
 
 var c = "\033[36m"
 var r = "\033[39m"
+var proxy = config().Joiner.Proxy
+var p, _ = url.Parse("http://" + proxy)
 var Client = &http.Client{
 	Transport: &http.Transport{
 		TLSClientConfig: &tls.Config{
 			MaxVersion: tls.VersionTLS13,
 		},
-		//Proxy: http.ProxyURL(p),
+		Proxy: http.ProxyURL(p),
 	},
 }
 
