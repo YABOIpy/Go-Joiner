@@ -2,7 +2,7 @@
 
 star ⭐ For support !
 
-UPDATED JOINER: https://github.com.yaboipy/go-massdm
+UPDATED JOINER: https://github.com/yaboipy/go-massdm
 
 Discord Token Joiner 
 
